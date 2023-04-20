@@ -30,19 +30,15 @@ export default function SignUpPage() {
     setLoading(true)
     axios.post(`${URL}/cadastro`,{name: form.name, email: form.email,password: form.password})
     .then((response)=>{
-      console.log(response)
       navigate("/")
       
     })
     .catch((err)=>{
-      console.log(err)
       alert(err.response.data)
       setLoading(false)
     })
 
   }
-
-  console.log(form)
 
   return (
     <SingUpContainer>
