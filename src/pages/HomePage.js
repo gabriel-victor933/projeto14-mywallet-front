@@ -5,12 +5,14 @@ import { useEffect, useState } from "react"
 import URL from "../constants/Urls"
 import axios from "axios"
 import LIstItem from "../components/ListItem"
+import { useNavigate } from "react-router-dom"
 
 export default function HomePage() {
 
   const [itens, setItens] = useState([])
   const [total, setTotal] = useState(0)
   const [name, setName] = useState("")
+  const navigate = useNavigate()
 
   function calcularTotal(dados){
 
@@ -31,18 +33,27 @@ export default function HomePage() {
 
     const token = localStorage.getItem("token")
 
-    const config = { headers: { Authorization: `Bearer ${token}`}}
+    console.log(token)
 
-    axios.get(`${URL}/transacoes`,config)
-    .then((dados)=>{
-      setItens(dados.data.transacoes)
-      calcularTotal(dados.data.transacoes)
-      setName(dados.data.name)
+    if(token){
 
-    })
-    .catch((err)=>{
-      console.log(err)
-    })
+      const config = { headers: { Authorization: `Bearer ${token}`}}
+      axios.get(`${URL}/transacoes`,config)
+      .then((dados)=>{
+        setItens(dados.data.transacoes)
+        calcularTotal(dados.data.transacoes)
+        setName(dados.data.name)
+  
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+
+    } else {
+      navigate("/")
+    }
+
+
 
   },[])
 
@@ -76,15 +87,6 @@ export default function HomePage() {
       {conditionalComponent()}
       </TransactionsContainer>
 
-      {/* <TransactionsContainer>
-        <ul>
-          {itens.map((item)=> <LIstItem key={item._id} data={item.data} descricao={item.descricao} valor={item.valor} tipo={item.tipo}/>)}
-        </ul>
-        <article>
-          <strong>Saldo</strong>
-          <Value color={total >= 0 ? "green": "red"}>{total.toFixed(2)}</Value>
-        </article>
-      </TransactionsContainer> */}
 
 
       <ButtonsContainer>
