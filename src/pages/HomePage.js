@@ -35,7 +35,6 @@ export default function HomePage() {
 
     axios.get(`${URL}/transacoes`,config)
     .then((dados)=>{
-      console.log(dados)
       setItens(dados.data.transacoes)
       calcularTotal(dados.data.transacoes)
       setName(dados.data.name)
@@ -47,8 +46,25 @@ export default function HomePage() {
 
   },[])
 
+  function conditionalComponent(){
+    if(itens.length >0){
+      return (<>
+          <ul>
+            {itens.map((item) => <LIstItem key={item._id} data={item.data} descricao={item.descricao} valor={item.valor} tipo={item.tipo} />)}
+          </ul>
+          <article>
+            <strong>Saldo</strong>
+            <Value color={total >= 0 ? "green" : "red"}>{total.toFixed(2)}</Value>
+          </article>
+      </>)
+    } else {
+      return (<h3>Não há registros de
+        entrada ou saída</h3>)
+      
+    }
+  }
 
-  console.log(itens)
+
   return (
     <HomeContainer>
       <Header>
@@ -57,16 +73,18 @@ export default function HomePage() {
       </Header>
 
       <TransactionsContainer>
-        <ul>
+      {conditionalComponent()}
+      </TransactionsContainer>
 
+      {/* <TransactionsContainer>
+        <ul>
           {itens.map((item)=> <LIstItem key={item._id} data={item.data} descricao={item.descricao} valor={item.valor} tipo={item.tipo}/>)}
         </ul>
-
         <article>
           <strong>Saldo</strong>
           <Value color={total >= 0 ? "green": "red"}>{total.toFixed(2)}</Value>
         </article>
-      </TransactionsContainer>
+      </TransactionsContainer> */}
 
 
       <ButtonsContainer>
@@ -110,6 +128,7 @@ const TransactionsContainer = styled.article`
   flex-direction: column;
   justify-content: space-between;
   height: 70%;
+  position: relative;
 
   ul {
     overflow-y: scroll;
@@ -124,6 +143,20 @@ const TransactionsContainer = styled.article`
       font-weight: 700;
       text-transform: uppercase;
     }
+  }
+
+  h3 {
+    width: 250px;
+    font-family: 'Raleway';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 23px;
+    text-align: center;
+    color: #868686;
+    position: absolute;
+    top: 50%;
+    left: calc(50% - 125px);
   }
 `
 const ButtonsContainer = styled.section`
