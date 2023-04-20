@@ -26,6 +26,7 @@ export default function SignInPage() {
     .then((response)=>{
 
       localStorage.setItem("token", response.data);
+    
       navigate("/home")
     })
     .catch((err)=>{

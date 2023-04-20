@@ -1,37 +1,70 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
+import { useEffect, useState } from "react"
+import URL from "../constants/Urls"
+import axios from "axios"
+import LIstItem from "../components/ListItem"
 
 export default function HomePage() {
+
+  const [itens, setItens] = useState([])
+  const [total, setTotal] = useState(0)
+  const [name, setName] = useState("")
+
+  function calcularTotal(dados){
+
+    let soma = 0
+
+    dados.forEach((item)=>{
+      if(item.tipo === "entrada"){
+        soma += item.valor
+      }else{
+        soma -= item.valor
+      }
+    })
+
+    setTotal(soma)
+  }
+
+  useEffect(()=>{
+
+    const token = localStorage.getItem("token")
+
+    const config = { headers: { Authorization: `Bearer ${token}`}}
+
+    axios.get(`${URL}/transacoes`,config)
+    .then((dados)=>{
+      console.log(dados)
+      setItens(dados.data.transacoes)
+      calcularTotal(dados.data.transacoes)
+      setName(dados.data.name)
+
+    })
+    .catch((err)=>{
+      console.log(err)
+    })
+
+  },[])
+
+
+  console.log(itens)
   return (
     <HomeContainer>
       <Header>
-        <h1>Olá, Fulano</h1>
+        <h1>Olá, {name}</h1>
         <BiExit />
       </Header>
 
       <TransactionsContainer>
         <ul>
-          <ListItemContainer>
-            <div>
-              <span>30/11</span>
-              <strong>Almoço mãe</strong>
-            </div>
-            <Value color={"negativo"}>120,00</Value>
-          </ListItemContainer>
 
-          <ListItemContainer>
-            <div>
-              <span>15/11</span>
-              <strong>Salário</strong>
-            </div>
-            <Value color={"positivo"}>3000,00</Value>
-          </ListItemContainer>
+          {itens.map((item)=> <LIstItem key={item._id} data={item.data} descricao={item.descricao} valor={item.valor} tipo={item.tipo}/>)}
         </ul>
 
         <article>
           <strong>Saldo</strong>
-          <Value color={"positivo"}>2880,00</Value>
+          <Value color={total >= 0 ? "green": "red"}>{total.toFixed(2)}</Value>
         </article>
       </TransactionsContainer>
 
@@ -54,7 +87,9 @@ export default function HomePage() {
 const HomeContainer = styled.div`
   display: flex;
   flex-direction: column;
-  height: calc(100vh - 50px);
+  height: 100vh;
+  box-sizing: border-box;
+  padding: 20px 0px;
 `
 const Header = styled.header`
   display: flex;
@@ -74,6 +109,14 @@ const TransactionsContainer = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  height: 70%;
+
+  ul {
+    overflow-y: scroll;
+    height: 90%;
+  }
+
+
   article {
     display: flex;
     justify-content: space-between;   
@@ -105,17 +148,5 @@ const ButtonsContainer = styled.section`
 const Value = styled.div`
   font-size: 16px;
   text-align: right;
-  color: ${(props) => (props.color === "positivo" ? "green" : "red")};
-`
-const ListItemContainer = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  color: #000000;
-  margin-right: 10px;
-  div span {
-    color: #c6c6c6;
-    margin-right: 10px;
-  }
+  color: ${(props)=>props.color};
 `
