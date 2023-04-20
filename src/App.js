@@ -22,7 +22,8 @@ export default function App() {
 
 const PagesContainer = styled.main`
   background-color: #8c11be;
-  width: calc(100vw - 50px);
+  width: 100%;
   max-height: 100vh;
-  padding: 25px;
+  box-sizing: border-box;
+  padding: 0px 25px ;
 `
