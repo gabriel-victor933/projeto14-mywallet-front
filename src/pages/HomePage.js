@@ -5,7 +5,7 @@ import { useEffect, useState } from "react"
 import URL from "../constants/Urls"
 import axios from "axios"
 import LIstItem from "../components/ListItem"
-import { useNavigate } from "react-router-dom"
+import { useNavigate,Link } from "react-router-dom"
 
 export default function HomePage() {
 
@@ -33,8 +33,6 @@ export default function HomePage() {
 
     const token = localStorage.getItem("token")
 
-    console.log(token)
-
     if(token){
 
       const config = { headers: { Authorization: `Bearer ${token}`}}
@@ -52,8 +50,6 @@ export default function HomePage() {
     } else {
       navigate("/")
     }
-
-
 
   },[])
 
@@ -90,14 +86,18 @@ export default function HomePage() {
 
 
       <ButtonsContainer>
-        <button>
-          <AiOutlinePlusCircle />
-          <p>Nova <br /> entrada</p>
-        </button>
+        <Link to="/nova-transacao/entrada">
+          <button>
+            <AiOutlinePlusCircle />
+            <p>Nova <br /> entrada</p>
+          </button>
+        </Link>
+        <Link to="/nova-transacao/saida">
         <button>
           <AiOutlineMinusCircle />
           <p>Nova <br />saída</p>
         </button>
+        </Link>
       </ButtonsContainer>
 
     </HomeContainer>
@@ -166,9 +166,12 @@ const ButtonsContainer = styled.section`
   margin-bottom: 0;
   display: flex;
   gap: 15px;
-  
-  button {
+
+  a {
     width: 50%;
+
+    button {
+    width: 100%;
     height: 115px;
     font-size: 22px;
     text-align: left;
@@ -179,6 +182,9 @@ const ButtonsContainer = styled.section`
       font-size: 18px;
     }
   }
+  }
+  
+  
 `
 const Value = styled.div`
   font-size: 16px;
