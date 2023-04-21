@@ -1,7 +1,6 @@
 import { Link } from "react-router-dom"
 import styled from "styled-components"
 import MyWalletLogo from "../components/MyWalletLogo"
-import URL from "../constants/Urls"
 import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
@@ -28,7 +27,7 @@ export default function SignUpPage() {
     }
 
     setLoading(true)
-    axios.post(`${URL}/cadastro`,{name: form.name, email: form.email,password: form.password})
+    axios.post(`${process.env.REACT_APP_API_URL}/cadastro`,{name: form.name, email: form.email,password: form.password})
     .then((response)=>{
       navigate("/")
       

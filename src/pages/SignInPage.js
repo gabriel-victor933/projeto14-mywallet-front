@@ -3,7 +3,6 @@ import { Link } from "react-router-dom"
 import MyWalletLogo from "../components/MyWalletLogo"
 import { useState } from "react"
 import axios from "axios"
-import URL from "../constants/Urls"
 import { useNavigate } from "react-router-dom"
 
 
@@ -22,7 +21,7 @@ export default function SignInPage() {
     e.preventDefault()
 
     setLoading(true)
-    axios.post(`${URL}`,{email: form.email, password: form.password})
+    axios.post(`${process.env.REACT_APP_API_URL}`,{email: form.email, password: form.password})
     .then((response)=>{
 
       localStorage.setItem("token", response.data);

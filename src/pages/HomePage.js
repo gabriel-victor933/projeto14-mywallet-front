@@ -2,7 +2,6 @@ import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
 import { useEffect, useState } from "react"
-import URL from "../constants/Urls"
 import axios from "axios"
 import LIstItem from "../components/ListItem"
 import { useNavigate,Link } from "react-router-dom"
@@ -36,7 +35,7 @@ export default function HomePage() {
     if(token){
 
       const config = { headers: { Authorization: `Bearer ${token}`}}
-      axios.get(`${URL}/transacoes`,config)
+      axios.get(`${process.env.REACT_APP_API_URL}/transacoes`,config)
       .then((dados)=>{
         setItens(dados.data.transacoes)
         calcularTotal(dados.data.transacoes)
@@ -51,7 +50,7 @@ export default function HomePage() {
       navigate("/")
     }
 
-  },[])
+  },[navigate])
 
   function conditionalComponent(){
     if(itens.length >0){
@@ -71,12 +70,17 @@ export default function HomePage() {
     }
   }
 
+  function logOut(){
+    localStorage.removeItem("token")
+    navigate("/")
+  }
+
 
   return (
     <HomeContainer>
       <Header>
         <h1>Olá, {name}</h1>
-        <BiExit />
+        <BiExit onClick={logOut}/>
       </Header>
 
       <TransactionsContainer>

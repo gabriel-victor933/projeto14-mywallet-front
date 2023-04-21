@@ -2,7 +2,6 @@ import styled from "styled-components"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
-import URL from "../constants/Urls"
 
 export default function TransactionsPage() {
 
@@ -29,7 +28,7 @@ export default function TransactionsPage() {
 
     setLoading(true)
 
-    axios.post(`${URL}/nova-transacao/${tipo}`,data,config)
+    axios.post(`${process.env.REACT_APP_API_URL}/nova-transacao/${tipo}`,data,config)
     .then((resposta)=>{
       navigate("/home")
     })
@@ -44,7 +43,7 @@ export default function TransactionsPage() {
     if(token === null){
       navigate("/")
     }
-  },[])
+  },[token,navigate])
 
   return (
     <TransactionsContainer>
