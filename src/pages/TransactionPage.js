@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { useNavigate, useParams } from "react-router-dom"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import URL from "../constants/Urls"
 
@@ -12,6 +12,8 @@ export default function TransactionsPage() {
   const {tipo} = useParams()
   const navigate = useNavigate()
 
+  const token = localStorage.getItem("token")
+
   function handleChange(e){
 
     setForm({...form,[e.target.name]:e.target.value})
@@ -22,7 +24,7 @@ export default function TransactionsPage() {
 
 
     const data = {valor: parseFloat(form.valor), descricao: form.descricao}
-    const token = localStorage.getItem("token")
+    
     const config = { headers: { Authorization: `Bearer ${token}`}}
 
     setLoading(true)
@@ -37,6 +39,12 @@ export default function TransactionsPage() {
     })
 
   }
+
+  useEffect(()=>{
+    if(token === null){
+      navigate("/")
+    }
+  },[])
 
   return (
     <TransactionsContainer>
