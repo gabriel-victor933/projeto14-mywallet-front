@@ -133,7 +133,7 @@ const TransactionsContainer = styled.article`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  height: 70%;
+  height: 60vh;
   position: relative;
 
   ul {
