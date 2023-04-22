@@ -12,6 +12,7 @@ export default function HomePage() {
   const [total, setTotal] = useState(0)
   const [name, setName] = useState("")
   const navigate = useNavigate()
+  const token = localStorage.getItem("token")
 
   function calcularTotal(dados){
 
@@ -30,7 +31,7 @@ export default function HomePage() {
 
   useEffect(()=>{
 
-    const token = localStorage.getItem("token")
+    
 
     if(token){
 
@@ -50,13 +51,13 @@ export default function HomePage() {
       navigate("/")
     }
 
-  },[navigate])
+  },[navigate,token])
 
   function conditionalComponent(){
     if(itens.length >0){
       return (<>
           <ul>
-            {itens.map((item) => <LIstItem key={item._id} id={item._id}data={item.data} descricao={item.descricao} valor={item.valor} tipo={item.tipo} handleDelete={handleDelete}/>)}
+            {itens.map((item) => <LIstItem key={item._id} id={item._id} data={item.data} descricao={item.descricao} valor={item.valor} tipo={item.tipo} handleDelete={handleDelete}/>)}
           </ul>
           <article>
             <strong>Saldo</strong>
@@ -79,7 +80,17 @@ export default function HomePage() {
 
     if(!window.confirm()) return
 
-    console.log(id,"deletado")
+    const config = { headers: { Authorization: `Bearer ${token}`}}
+
+    axios.delete(`${process.env.REACT_APP_API_URL}/transacoes/${id}`,config)
+    .catch((erro)=>{
+      alert(`Não foi possivel excluir a transação: ${erro.response.data}`)
+      setItens([...itens])
+    })
+
+    const novoItens = itens.filter((item) => item._id !== id)
+    setItens(novoItens)
+    calcularTotal(novoItens)
   }
 
 
