@@ -62,7 +62,7 @@ export default function AppContext({children}){
     }
 
     return (
-        <Context.Provider value={{selecionar, selecionado,total,itens,CarregarItens}}>
+        <Context.Provider value={{selecionar, selecionado,total,itens,CarregarItens,handleDelete}}>
             {children}
         </Context.Provider>
     )

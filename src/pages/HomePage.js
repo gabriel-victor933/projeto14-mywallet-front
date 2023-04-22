@@ -1,8 +1,7 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
-import { useEffect, useState, useContext } from "react"
-import axios from "axios"
+import { useEffect,  useContext } from "react"
 import LIstItem from "../components/ListItem"
 import { useNavigate,Link } from "react-router-dom"
 import { Context } from "../AppContext"
@@ -12,7 +11,7 @@ export default function HomePage() {
   
   const navigate = useNavigate()
 
-  const {itens,total,CarregarItens,handleDelete} = useContext(Context)
+  const {itens,total,CarregarItens} = useContext(Context)
 
   const token = localStorage.getItem("token")
   const name = localStorage.getItem("name")
@@ -28,7 +27,7 @@ export default function HomePage() {
       navigate("/")
     }
 
-  },[navigate,token])
+  },[navigate,token,CarregarItens])
 
   function conditionalComponent(){
     if(itens.length >0){

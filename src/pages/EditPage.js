@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
-//import axios from "axios"
+import axios from "axios"
 import { Context } from "../AppContext"
 import { useContext } from "react"
 
@@ -11,9 +11,6 @@ export default function EditPage() {
 
     const [form,setForm] = useState({valor:selecionado.valor,descricao:selecionado.descricao})
     const [loading,setLoading] = useState(false)
-
-    
-    console.log(selecionado)
 
     const {tipo} = useParams()
     const navigate = useNavigate()
@@ -28,7 +25,20 @@ export default function EditPage() {
     function handleSubmit(e){
         e.preventDefault()
 
+        const config = { headers: { Authorization: `Bearer ${token}` } }
 
+        const data = {...form, valor: parseFloat(form.valor)}
+        
+
+        setLoading(true)
+        axios.put(`${process.env.REACT_APP_API_URL}/transacoes/${selecionado._id}`,data,config)
+        .then((dados)=>{
+            navigate("/home")
+        })
+        .catch((erro)=>{
+            alert("Não foi possivel editar a transação: " + erro.response.data)
+            setLoading(false)
+        })
     }
 
     useEffect(()=>{
