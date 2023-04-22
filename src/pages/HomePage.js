@@ -10,9 +10,9 @@ export default function HomePage() {
 
   const [itens, setItens] = useState([])
   const [total, setTotal] = useState(0)
-  const [name, setName] = useState("")
   const navigate = useNavigate()
   const token = localStorage.getItem("token")
+  const name = localStorage.getItem("name")
 
   function calcularTotal(dados){
 
@@ -38,9 +38,8 @@ export default function HomePage() {
       const config = { headers: { Authorization: `Bearer ${token}`}}
       axios.get(`${process.env.REACT_APP_API_URL}/transacoes`,config)
       .then((dados)=>{
-        setItens(dados.data.transacoes)
-        calcularTotal(dados.data.transacoes)
-        setName(dados.data.name)
+        setItens(dados.data)
+        calcularTotal(dados.data)
   
       })
       .catch((err)=>{
