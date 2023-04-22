@@ -56,7 +56,7 @@ export default function HomePage() {
     if(itens.length >0){
       return (<>
           <ul>
-            {itens.map((item) => <LIstItem key={item._id} data={item.data} descricao={item.descricao} valor={item.valor} tipo={item.tipo} />)}
+            {itens.map((item) => <LIstItem key={item._id} id={item._id}data={item.data} descricao={item.descricao} valor={item.valor} tipo={item.tipo} handleDelete={handleDelete}/>)}
           </ul>
           <article>
             <strong>Saldo</strong>
@@ -73,6 +73,13 @@ export default function HomePage() {
   function logOut(){
     localStorage.removeItem("token")
     navigate("/")
+  }
+
+  function handleDelete(id){
+
+    if(!window.confirm()) return
+
+    console.log(id,"deletado")
   }
 
 

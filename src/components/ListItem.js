@@ -1,6 +1,7 @@
 import styled from "styled-components"
+import { BsX } from "react-icons/bs";
 
-export default function LIstItem({descricao, valor, tipo,data}){
+export default function LIstItem({id,descricao, valor, tipo,data, handleDelete}){
 
     return (
         <ListItemContainer>
@@ -8,7 +9,11 @@ export default function LIstItem({descricao, valor, tipo,data}){
               <span>{data}</span>
               <strong>{descricao}</strong>
             </div>
-            <Valor color={tipo}>{valor}</Valor>
+            <div>
+              <Valor color={tipo}>{valor}</Valor>
+              <BsX className="icone" onClick={() => handleDelete(id)}/>
+            </div>
+            
         </ListItemContainer>
     )
 }
@@ -20,9 +25,22 @@ const ListItemContainer = styled.li`
   margin-bottom: 8px;
   color: #000000;
   margin-right: 10px;
-  div span {
+  font-size: 16px;
+
+  span {
     color: #c6c6c6;
     margin-right: 10px;
+  }
+
+  div{
+    display: flex;
+    align-items: center;
+  }
+
+  .icone {
+    font-size: 25px;
+    color: lightgray;
+    margin-left: 5px;
   }
 `
 
