@@ -1,50 +1,28 @@
 import styled from "styled-components"
 import { BiExit } from "react-icons/bi"
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from "react-icons/ai"
-import { useEffect, useState } from "react"
+import { useEffect, useState, useContext } from "react"
 import axios from "axios"
 import LIstItem from "../components/ListItem"
 import { useNavigate,Link } from "react-router-dom"
+import { Context } from "../AppContext"
 
 export default function HomePage() {
 
-  const [itens, setItens] = useState([])
-  const [total, setTotal] = useState(0)
+  
   const navigate = useNavigate()
+
+  const {itens,total,CarregarItens,handleDelete} = useContext(Context)
+
   const token = localStorage.getItem("token")
   const name = localStorage.getItem("name")
 
-  function calcularTotal(dados){
-
-    let soma = 0
-
-    dados.forEach((item)=>{
-      if(item.tipo === "entrada"){
-        soma += item.valor
-      }else{
-        soma -= item.valor
-      }
-    })
-
-    setTotal(soma)
-  }
 
   useEffect(()=>{
 
-    
-
     if(token){
 
-      const config = { headers: { Authorization: `Bearer ${token}`}}
-      axios.get(`${process.env.REACT_APP_API_URL}/transacoes`,config)
-      .then((dados)=>{
-        setItens(dados.data)
-        calcularTotal(dados.data)
-  
-      })
-      .catch((err)=>{
-        console.log(err)
-      })
+      CarregarItens(token)
 
     } else {
       navigate("/")
@@ -56,7 +34,7 @@ export default function HomePage() {
     if(itens.length >0){
       return (<>
           <ul>
-            {itens.map((item) => <LIstItem key={item._id} id={item._id} data={item.data} descricao={item.descricao} valor={item.valor} tipo={item.tipo} handleDelete={handleDelete}/>)}
+            {itens.map((item) => <LIstItem key={item._id} item={item} token={token}/>)}
           </ul>
           <article>
             <strong>Saldo</strong>
@@ -75,22 +53,7 @@ export default function HomePage() {
     navigate("/")
   }
 
-  function handleDelete(id){
 
-    if(!window.confirm()) return
-
-    const config = { headers: { Authorization: `Bearer ${token}`}}
-
-    axios.delete(`${process.env.REACT_APP_API_URL}/transacoes/${id}`,config)
-    .catch((erro)=>{
-      alert(`Não foi possivel excluir a transação: ${erro.response.data}`)
-      setItens([...itens])
-    })
-
-    const novoItens = itens.filter((item) => item._id !== id)
-    setItens(novoItens)
-    calcularTotal(novoItens)
-  }
 
 
   return (

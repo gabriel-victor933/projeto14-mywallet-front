@@ -1,17 +1,28 @@
 import styled from "styled-components"
 import { BsX } from "react-icons/bs";
+import { useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import { Context } from "../AppContext";
 
-export default function LIstItem({id,descricao, valor, tipo,data, handleDelete}){
+export default function LIstItem({item, token}){
+
+  const navigate = useNavigate()
+  const {selecionar,handleDelete} = useContext(Context)  
+
+  function changePage(){
+    selecionar(item)
+    navigate(`/editar-registro/${item.tipo}`)
+  }
 
     return (
         <ListItemContainer>
             <div>
-              <span>{data}</span>
-              <strong>{descricao}</strong>
+              <span>{item.data}</span>
+              <strong onClick={changePage}>{item.descricao}</strong>
             </div>
             <div>
-              <Valor color={tipo}>{valor}</Valor>
-              <BsX className="icone" onClick={() => handleDelete(id)}/>
+              <Valor color={item.tipo}>{item.valor}</Valor>
+              <BsX className="icone" onClick={() => handleDelete(item._id,token)}/>
             </div>
             
         </ListItemContainer>
