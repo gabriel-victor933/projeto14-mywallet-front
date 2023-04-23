@@ -19,7 +19,6 @@ export default function HomePage() {
 
   useEffect(()=>{
 
-    console.log("rodando useEffect na homes")
 
     if(token){
 

@@ -44,6 +44,8 @@ export default function EditPage() {
     }
 
     useEffect(()=>{
+        console.log("useEffect pagina edit")
+
         if(token === null){
         navigate("/")
         }
