@@ -2,6 +2,8 @@ import styled from "styled-components"
 import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
+import { TailSpin } from 'react-loader-spinner'
+
 
 export default function TransactionsPage() {
 
@@ -48,11 +50,13 @@ export default function TransactionsPage() {
   return (
     <TransactionsContainer>
       <h1>Nova TRANSAÇÃO</h1>
-      <form onSubmit={handleSubmit}>
+      {!loading && <form onSubmit={handleSubmit}>
         <input placeholder="Valor" type="number" step=".01" name="valor" min="0" onChange={handleChange} disabled={loading} required/>
         <input placeholder="Descrição" type="text" name="descricao" onChange={handleChange} disabled={loading} required/>
         <button>Salvar TRANSAÇÃO</button>
-      </form>
+      </form>}
+
+      {loading && <TailSpin height="100" width="100" color="lightgray" />}
     </TransactionsContainer>
   )
 }

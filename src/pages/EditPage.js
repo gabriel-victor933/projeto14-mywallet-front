@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 import axios from "axios"
 import { Context } from "../AppContext"
 import { useContext } from "react"
+import { TailSpin } from 'react-loader-spinner'
+
 
 export default function EditPage() {
 
@@ -50,11 +52,12 @@ export default function EditPage() {
     return (
         <TransactionsContainer>
         <h1>Editar {tipo}</h1>
-        <form onSubmit={handleSubmit}>
+        {!loading && <form onSubmit={handleSubmit}>
             <input placeholder="Valor" type="number" step=".01" name="valor" min="0" value={form.valor} onChange={handleChange} disabled={loading} required/>
             <input placeholder="Descrição" type="text" name="descricao" value={form.descricao} onChange={handleChange} disabled={loading} required/>
             <button>Atualizar {tipo}</button>
-        </form>
+        </form>}
+        {loading && <TailSpin height="100" width="100" color="lightgray" />}
         </TransactionsContainer>
     )
 }
