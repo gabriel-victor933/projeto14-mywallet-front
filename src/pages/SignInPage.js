@@ -4,6 +4,7 @@ import MyWalletLogo from "../components/MyWalletLogo"
 import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
+import { TailSpin } from 'react-loader-spinner'
 
 
 export default function SignInPage() {
@@ -36,16 +37,21 @@ export default function SignInPage() {
   }
   return (
     <SingInContainer>
-      <form onSubmit={handleSubmit}>
+      {!loading && <><form onSubmit={handleSubmit}>
         <MyWalletLogo />
         <input placeholder="E-mail" type="email" name="email" onChange={handleChange} required disabled={loading}/>
         <input placeholder="Senha" type="password" autoComplete="new-password" name="password" onChange={handleChange} required disabled={loading}/>
         <button>Entrar</button>
       </form>
-
       <Link to="/cadastro" >
         Primeira vez? Cadastre-se!
       </Link>
+      </>}
+
+      {loading && <TailSpin height="100" width="100" color="lightgray" />}
+
+
+      
     </SingInContainer>
   )
 }

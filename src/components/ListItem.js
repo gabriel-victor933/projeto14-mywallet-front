@@ -53,10 +53,17 @@ const ListItemContainer = styled.li`
     color: lightgray;
     margin-left: 5px;
   }
+  strong {
+    :hover{
+      font-size: 18px;
+      cursor: pointer;
+    }
+  }
 `
 
 const Valor = styled.div`
   font-size: 16px;
   text-align: right;
   color: ${(props) => (props.color ==="entrada"  ? "green" : "red")};
+
 `

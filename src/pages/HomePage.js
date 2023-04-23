@@ -19,7 +19,10 @@ export default function HomePage() {
 
   useEffect(()=>{
 
+    console.log("rodando useEffect na homes")
+
     if(token){
+
 
       CarregarItens(token)
 
@@ -27,7 +30,8 @@ export default function HomePage() {
       navigate("/")
     }
 
-  },[navigate,token,CarregarItens])
+  },[])
+
 
   function conditionalComponent(){
     if(itens.length >0){

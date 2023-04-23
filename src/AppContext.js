@@ -20,6 +20,8 @@ export default function AppContext({children}){
         const config = { headers: { Authorization: `Bearer ${token}` } }
         axios.get(`${process.env.REACT_APP_API_URL}/transacoes`, config)
             .then((dados) => {
+                console.log("setando itens do banco de dados")
+
                 setItens(dados.data)
                 calcularTotal(dados.data)
 
@@ -55,7 +57,7 @@ export default function AppContext({children}){
                 alert(`Não foi possivel excluir a transação: ${erro.response.data}`)
                 setItens([...itens])
             })
-
+        
         const novoItens = itens.filter((item) => item._id !== id)
         setItens(novoItens)
         calcularTotal(novoItens)
