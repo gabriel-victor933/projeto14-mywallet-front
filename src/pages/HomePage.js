@@ -29,7 +29,7 @@ export default function HomePage() {
       navigate("/")
     }
 
-  },[])
+  },[navigate,token])
 
 
   function conditionalComponent(){

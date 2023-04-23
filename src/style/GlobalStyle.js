@@ -52,6 +52,7 @@ const GlobalStyle = createGlobalStyle`
         color: white;
         text-decoration: none;
         padding-top: 30px;
+        margin: 12px 0px;
     }
 `
 
