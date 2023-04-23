@@ -20,7 +20,6 @@ export default function AppContext({children}){
         const config = { headers: { Authorization: `Bearer ${token}` } }
         axios.get(`${process.env.REACT_APP_API_URL}/transacoes`, config)
             .then((dados) => {
-                console.log("setando itens do banco de dados")
 
                 setItens(dados.data)
                 calcularTotal(dados.data)
