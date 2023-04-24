@@ -11,7 +11,6 @@ import { useForm } from "react-hook-form";
 export default function EditPage() {
 
     const {selecionado} = useContext(Context)
-    console.log(selecionado)
     const {register, handleSubmit, formState: {errors}} = useForm({defaultValues: {valor: selecionado.valor, descricao: selecionado.descricao}})
     const [loading,setLoading] = useState(false)
 

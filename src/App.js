@@ -6,6 +6,7 @@ import SignUpPage from "./pages/SignUpPage"
 import TransactionsPage from "./pages/TransactionPage"
 import EditPage from "./pages/EditPage"
 import AppContext from "./AppContext"
+import NotFound from "./pages/NotFound"
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
             <Route path="/home" element={<HomePage />} />
             <Route path="/nova-transacao/:tipo" element={<TransactionsPage />} />
             <Route path="/editar-registro/:tipo" element={<EditPage />} />
+            <Route path='*' element={<NotFound />}/>
           </Routes>
         </BrowserRouter>
       </PagesContainer>
