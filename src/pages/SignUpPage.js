@@ -5,22 +5,22 @@ import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { TailSpin } from 'react-loader-spinner'
+import { useForm } from "react-hook-form";
+
 
 export default function SignUpPage() {
 
 
-  const [form, setForm] = useState({name: "" ,email:"", password: "", confirm: ""})
+  //const [form, setForm] = useState({name: "" ,email:"", password: "", confirm: ""})
   const [loading, setLoading] = useState(false)
+  const {register, handleSubmit, formState: {errors}} = useForm()
 
   const navigate = useNavigate()
 
-  function handleForms(e){
 
-    setForm({...form,[e.target.name]:e.target.value})
-  }
 
-  function handleSubmit(e){
-    e.preventDefault()
+
+  function onSubmit(form){
 
     if(form.password !== form.confirm){
       alert("senhas diferentes")
@@ -37,25 +37,29 @@ export default function SignUpPage() {
       alert(err.response.data)
       setLoading(false)
     })
-
   }
 
   return (
     <SingUpContainer>
-      {!loading &&<> <form onSubmit={handleSubmit} >
+     {!loading &&<> <form onSubmit={handleSubmit(onSubmit)} >
         <MyWalletLogo />
-        <input placeholder="Nome" type="text" name="name" required onChange={handleForms} disabled={loading}/>
-        <input placeholder="E-mail" type="email" name="email" required onChange={handleForms} disabled={loading}/>
-        <input placeholder="Senha" type="password" autoComplete="new-password" name="password" required onChange={handleForms} disabled={loading}/>
-        <input placeholder="Confirme a senha" type="password" autoComplete="new-password" name="confirm" required onChange={handleForms} disabled={loading}/>
+        <input placeholder="Nome" type="text" {...register("name",{ required:"Por favor, preencha o campo nome."})}  disabled={loading} />
+        {errors.name?.message !== undefined &&<p>{errors.name?.message}</p>}
+        <input placeholder="E-mail" type="email" {...register("email",{ required:"Por favor, preencha o campo email." }) } disabled={loading} />
+        {errors.email?.message !== undefined &&<p>{errors.email?.message}</p>}
+        <input placeholder="Senha" type="password"  {...register("password",{ required:"Por favor, preencha o campo senha.", minLength: {value: 3, message: "A senha deve ter pelo menos 3 caracteres"} })} disabled={loading} />
+        {errors.password?.message !== undefined &&<p>{errors.password?.message}</p>}
+        <input placeholder="Confirme a senha" type="password" {...register("confirm",{ required:"Por favor, preencha o campo confirmar senha.", minLength: {value: 3, message: "A senha deve ter pelo menos 3 caracteres"} })} disabled={loading} />
+        {errors.confirm?.message !== undefined &&<p>{errors.confirm?.message}</p>}
         <button disabled={loading}>Cadastrar</button>
       </form>
       <Link to="/">
         Já tem uma conta? Entre agora!
       </Link>
       </>}
-      
 
+      
+  
       {loading && <TailSpin height="100" width="100" color="lightgray" />}
 
       
@@ -69,4 +73,12 @@ const SingUpContainer = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  p {
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+
+  }
 `
