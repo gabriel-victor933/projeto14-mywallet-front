@@ -26,7 +26,11 @@ export default function EditPage() {
         if(token === null){
         navigate("/")
         }
-    },[token,navigate])
+
+        if(tipo !=="saida" && tipo !== "entrada"){
+          navigate("/notfound")
+        }
+    },[token,navigate,tipo])
 
 
     function onSubmit(form){

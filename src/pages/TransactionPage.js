@@ -17,11 +17,17 @@ export default function TransactionsPage() {
 
   const token = localStorage.getItem("token")
 
+  console.log(tipo)
+
   useEffect(()=>{
     if(token === null){
       navigate("/")
     }
-  },[token,navigate])
+
+    if(tipo !=="saida" && tipo !== "entrada"){
+      navigate("/notfound")
+    }
+  },[token,navigate,tipo])
 
 
   function onSubmit(form){
