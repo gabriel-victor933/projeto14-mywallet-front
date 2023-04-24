@@ -5,21 +5,18 @@ import { useState } from "react"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { TailSpin } from 'react-loader-spinner'
+import { useForm } from "react-hook-form";
+
 
 
 export default function SignInPage() {
 
-  const [form, setForm] = useState({email: "",password:""})
+  const {register, handleSubmit, formState: {errors}} = useForm()
   const [loading, setLoading] = useState(false) 
   const navigate = useNavigate()
 
-  function handleChange(e){
 
-    setForm({...form,[e.target.name]:e.target.value})
-  }
-
-  function handleSubmit(e){
-    e.preventDefault()
+  function onSubmit(form){
 
     setLoading(true)
     axios.post(`${process.env.REACT_APP_API_URL}`,{email: form.email, password: form.password})
@@ -34,13 +31,16 @@ export default function SignInPage() {
       alert(err.response.data)
       setLoading(false)
     })
+
   }
   return (
     <SingInContainer>
-      {!loading && <><form onSubmit={handleSubmit}>
+      {!loading && <><form onSubmit={handleSubmit(onSubmit)}>
         <MyWalletLogo />
-        <input placeholder="E-mail" type="email" name="email" onChange={handleChange} required disabled={loading}/>
-        <input placeholder="Senha" type="password" autoComplete="new-password" name="password" onChange={handleChange} required disabled={loading}/>
+        <input placeholder="E-mail" type="email" {...register("email",{ required:"Por favor, preencha o campo email." }) } disabled={loading} />
+        {errors.email?.message !== undefined &&<p>{errors.email?.message}</p>}
+        <input placeholder="Senha" type="password"  {...register("password",{ required:"Por favor, preencha o campo senha.", minLength: {value: 3, message: "A senha deve ter pelo menos 3 caracteres"} })} disabled={loading} />
+        {errors.password?.message !== undefined &&<p>{errors.password?.message}</p>}
         <button>Entrar</button>
       </form>
       <Link to="/cadastro" >
@@ -62,4 +62,12 @@ const SingInContainer = styled.section`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  p {
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+
+  }
 `

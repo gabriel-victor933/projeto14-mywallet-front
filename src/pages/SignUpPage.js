@@ -10,8 +10,6 @@ import { useForm } from "react-hook-form";
 
 export default function SignUpPage() {
 
-
-  //const [form, setForm] = useState({name: "" ,email:"", password: "", confirm: ""})
   const [loading, setLoading] = useState(false)
   const {register, handleSubmit, formState: {errors}} = useForm()
 

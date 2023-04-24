@@ -3,11 +3,13 @@ import { useNavigate, useParams } from "react-router-dom"
 import { useEffect, useState } from "react"
 import axios from "axios"
 import { TailSpin } from 'react-loader-spinner'
+import { useForm } from "react-hook-form";
+
 
 
 export default function TransactionsPage() {
 
-  const [form,setForm] = useState({valor:0,descricao:""})
+  const {register, handleSubmit, formState: {errors}} = useForm()
   const [loading,setLoading] = useState(false)
 
   const {tipo} = useParams()
@@ -15,14 +17,14 @@ export default function TransactionsPage() {
 
   const token = localStorage.getItem("token")
 
-  function handleChange(e){
+  useEffect(()=>{
+    if(token === null){
+      navigate("/")
+    }
+  },[token,navigate])
 
-    setForm({...form,[e.target.name]:e.target.value})
-  }
 
-  function handleSubmit(e){
-    e.preventDefault()
-
+  function onSubmit(form){
 
     const data = {valor: parseFloat(form.valor), descricao: form.descricao}
     
@@ -38,21 +40,17 @@ export default function TransactionsPage() {
       alert(erro.response.data)
       setLoading(false)
     })
-
   }
-
-  useEffect(()=>{
-    if(token === null){
-      navigate("/")
-    }
-  },[token,navigate])
 
   return (
     <TransactionsContainer>
       <h1>Nova TRANSAÇÃO</h1>
-      {!loading && <form onSubmit={handleSubmit}>
-        <input placeholder="Valor" type="number" step=".01" name="valor" min="0" onChange={handleChange} disabled={loading} required/>
-        <input placeholder="Descrição" type="text" name="descricao" onChange={handleChange} disabled={loading} required/>
+      {!loading && <form onSubmit={handleSubmit(onSubmit)}>
+       
+        <input placeholder="Valor" type="number" step=".01" min="0" {...register("valor",{ required:"Por favor, preencha o campo valor." }) } disabled={loading} />
+        {errors.valor?.message !== undefined &&<p>{errors.valor?.message}</p>}
+        <input placeholder="Descricao" type="text"  {...register("descricao",{ required:"Por favor, preencha o campo descricão."})} disabled={loading} />
+        {errors.descricao?.message !== undefined &&<p>{errors.descricao?.message}</p>}
         <button>Salvar TRANSAÇÃO</button>
       </form>}
 
@@ -73,5 +71,13 @@ const TransactionsContainer = styled.main`
   h1 {
     align-self: flex-start;
     margin-bottom: 40px;
+  }
+
+  p {
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+
   }
 `
