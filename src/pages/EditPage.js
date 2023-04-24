@@ -11,7 +11,8 @@ import { useForm } from "react-hook-form";
 export default function EditPage() {
 
     const {selecionado} = useContext(Context)
-    const {register, handleSubmit, formState: {errors}} = useForm()
+    console.log(selecionado)
+    const {register, handleSubmit, formState: {errors}} = useForm({defaultValues: {valor: selecionado.valor, descricao: selecionado.descricao}})
     const [loading,setLoading] = useState(false)
 
     const {tipo} = useParams()
@@ -19,29 +20,7 @@ export default function EditPage() {
 
     const token = localStorage.getItem("token")
 
-/*     function handleChange(e){
 
-        setForm({...form,[e.target.name]:e.target.value})
-    }
-
-    function handleSubmit(e){
-        e.preventDefault()
-
-        const config = { headers: { Authorization: `Bearer ${token}` } }
-
-        const data = {...form, valor: parseFloat(form.valor)}
-        
-
-        setLoading(true)
-        axios.put(`${process.env.REACT_APP_API_URL}/transacoes/${selecionado._id}`,data,config)
-        .then((dados)=>{
-            navigate("/home")
-        })
-        .catch((erro)=>{
-            alert("Não foi possivel editar a transação: " + erro.response.data)
-            setLoading(false)
-        })
-    } */
 
     useEffect(()=>{
 
@@ -65,7 +44,7 @@ export default function EditPage() {
             alert("Não foi possivel editar a transação: " + erro.response.data)
             setLoading(false)
         })
-        
+
     }
 
     return (
