@@ -46,7 +46,6 @@ export default function TransactionsPage() {
     <TransactionsContainer>
       <h1>Nova TRANSAÇÃO</h1>
       {!loading && <form onSubmit={handleSubmit(onSubmit)}>
-       
         <input placeholder="Valor" type="number" step=".01" min="0" {...register("valor",{ required:"Por favor, preencha o campo valor." }) } disabled={loading} />
         {errors.valor?.message !== undefined &&<p>{errors.valor?.message}</p>}
         <input placeholder="Descricao" type="text"  {...register("descricao",{ required:"Por favor, preencha o campo descricão."})} disabled={loading} />

@@ -5,13 +5,13 @@ import axios from "axios"
 import { Context } from "../AppContext"
 import { useContext } from "react"
 import { TailSpin } from 'react-loader-spinner'
+import { useForm } from "react-hook-form";
 
 
 export default function EditPage() {
 
     const {selecionado} = useContext(Context)
-
-    const [form,setForm] = useState({valor:selecionado.valor,descricao:selecionado.descricao})
+    const {register, handleSubmit, formState: {errors}} = useForm()
     const [loading,setLoading] = useState(false)
 
     const {tipo} = useParams()
@@ -19,7 +19,7 @@ export default function EditPage() {
 
     const token = localStorage.getItem("token")
 
-    function handleChange(e){
+/*     function handleChange(e){
 
         setForm({...form,[e.target.name]:e.target.value})
     }
@@ -41,23 +41,42 @@ export default function EditPage() {
             alert("Não foi possivel editar a transação: " + erro.response.data)
             setLoading(false)
         })
-    }
+    } */
 
     useEffect(()=>{
-        console.log("useEffect pagina edit")
 
         if(token === null){
         navigate("/")
         }
     },[token,navigate])
 
+
+    function onSubmit(form){
+        const config = { headers: { Authorization: `Bearer ${token}` } }
+
+        const data = {...form, valor: parseFloat(form.valor)}
+        
+        setLoading(true)
+        axios.put(`${process.env.REACT_APP_API_URL}/transacoes/${selecionado._id}`,data,config)
+        .then((dados)=>{
+            navigate("/home")
+        })
+        .catch((erro)=>{
+            alert("Não foi possivel editar a transação: " + erro.response.data)
+            setLoading(false)
+        })
+        
+    }
+
     return (
         <TransactionsContainer>
         <h1>Editar {tipo}</h1>
-        {!loading && <form onSubmit={handleSubmit}>
-            <input placeholder="Valor" type="number" step=".01" name="valor" min="0" value={form.valor} onChange={handleChange} disabled={loading} required/>
-            <input placeholder="Descrição" type="text" name="descricao" value={form.descricao} onChange={handleChange} disabled={loading} required/>
-            <button>Atualizar {tipo}</button>
+        {!loading && <form onSubmit={handleSubmit(onSubmit)}>
+        <input placeholder="Valor" type="number" step=".01" min="0" {...register("valor",{ required:"Por favor, preencha o campo valor." }) } disabled={loading} />
+        {errors.valor?.message !== undefined &&<p>{errors.valor?.message}</p>}
+        <input placeholder="Descricao" type="text"  {...register("descricao",{ required:"Por favor, preencha o campo descricão."})} disabled={loading} />
+        {errors.descricao?.message !== undefined &&<p>{errors.descricao?.message}</p>}
+        <button>Atualizar {tipo}</button>
         </form>}
         {loading && <TailSpin height="100" width="100" color="lightgray" />}
         </TransactionsContainer>
@@ -76,5 +95,13 @@ const TransactionsContainer = styled.main`
   h1 {
     align-self: flex-start;
     margin-bottom: 40px;
+  }
+
+  p {
+    color: white;
+    font-size: 16px;
+    text-align: left;
+    width: 100%;
+
   }
 `
