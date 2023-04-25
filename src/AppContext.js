@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { createContext } from "react";
 import axios from "axios"
+import { useMemo } from "react";
 
 
 export const Context = createContext()
@@ -8,8 +9,11 @@ export const Context = createContext()
 export default function AppContext({children}){
 
     const [itens, setItens] = useState([])
-    const [total, setTotal] = useState(0)
     const [selecionado, setSelecionado] = useState("")
+
+    const total = useMemo(()=>{
+        return calcularTotal()
+    },[itens])
 
     function selecionar(item){
         setSelecionado(item)
@@ -22,7 +26,7 @@ export default function AppContext({children}){
             .then((dados) => {
 
                 setItens(dados.data)
-                calcularTotal(dados.data)
+                
 
             })
             .catch((err) => {
@@ -30,11 +34,11 @@ export default function AppContext({children}){
             })
     }
 
-    function calcularTotal(dados){
+    function calcularTotal(){
 
         let soma = 0
     
-        dados.forEach((item)=>{
+        itens.forEach((item)=>{
           if(item.tipo === "entrada"){
             soma += item.valor
           }else{
@@ -42,7 +46,7 @@ export default function AppContext({children}){
           }
         })
     
-        setTotal(soma)
+        return soma
       }
 
     function handleDelete(id,token) {
@@ -59,7 +63,6 @@ export default function AppContext({children}){
         
         const novoItens = itens.filter((item) => item._id !== id)
         setItens(novoItens)
-        calcularTotal(novoItens)
     }
 
     return (

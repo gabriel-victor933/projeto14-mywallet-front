@@ -19,12 +19,8 @@ export default function HomePage() {
 
   useEffect(()=>{
 
-
     if(token){
-
-
       CarregarItens(token)
-
     } else {
       navigate("/")
     }
